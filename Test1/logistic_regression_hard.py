@@ -26,7 +26,7 @@ def get_dataset():
         Method used to generate the dataset
     """
     #Number of rows per class
-    row_per_class = 100
+    row_per_class = 1
     #generate rows
     sick_people =  (np.random.randn(row_per_class,2)) + np.array([-2,-2])
     sick_people2 =  (np.random.randn(row_per_class,2)) + np.array([2,2])
@@ -106,7 +106,7 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
         This function is not generic or optimized and aims to understand better how it works
     """
     epochs = 10000
-    learning_rate = 1
+    learning_rate = 0.1
 
     #display Accuracy before the training
     layer1, prediction = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
