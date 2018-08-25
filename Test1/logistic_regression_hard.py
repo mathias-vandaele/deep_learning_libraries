@@ -1,6 +1,6 @@
 """
     Mathias Vandaele code
-    code splited to the maximum in order to understand better machine learning
+    code splited to the maximum in order to understand better machine learning especially deep learning
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +26,7 @@ def get_dataset():
         Method used to generate the dataset
     """
     #Number of rows per class
-    row_per_class = 1
+    row_per_class = 100
     #generate rows
     sick_people =  (np.random.randn(row_per_class,2)) + np.array([-2,-2])
     sick_people2 =  (np.random.randn(row_per_class,2)) + np.array([2,2])
@@ -106,7 +106,7 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
         This function is not generic or optimized and aims to understand better how it works
     """
     epochs = 10000
-    learning_rate = 0.1
+    learning_rate = 0.3
 
     #display Accuracy before the training
     layer1, prediction = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
@@ -115,7 +115,7 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
 
     for epoch in range(epochs):
         layer1, predictions = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
-        if epoch % 10 == 0:
+        if epoch % 1000 == 0:
             layer1, predictions = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
             print (cost(predictions, targets))
         """
@@ -150,16 +150,16 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
             error_neural_13 = error_neural_hidden_13 * derivative_activation_y(neural_input[2])
 
             weights_gradient_output += neural_input * output_delta
-            #bias_output += output_delta
+            bias_gradient_output += output_delta
 
             weights_gradient_11 += feature * error_neural_11
-            #bias_11 += error_neural_11
+            bias_gradient_11 += error_neural_11
 
             weights_gradient_12 += feature * error_neural_12
-            #bias_12 += error_neural_12
+            bias_gradient_12 += error_neural_12
 
             weights_gradient_13 += feature * error_neural_13
-            #bias_13 += error_neural_13
+            bias_gradient_13 += error_neural_13
 
 
         #Update the weights and bias
@@ -175,6 +175,26 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
     layer1, prediction = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
     predictions = np.around(prediction)
     print ("Accuracy", np.mean(predictions == targets))
+
+    """
+    We will display the result of our output neuron
+    We will generate randomly a lot of point and then see what predictions say
+    """
+    #Number of rows per class
+    row_per_class = 2000
+    #generate rows
+    sick_people =  (np.random.randn(row_per_class,2))*4
+    sick_people2 =  (np.random.randn(row_per_class,2))*4
+    healthy_people = (np.random.randn(row_per_class,2))*4
+    healthy_people2 =  (np.random.randn(row_per_class,2))*4
+    features = np.vstack([sick_people,sick_people2, healthy_people, healthy_people2])
+    layer1, prediction = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
+    predictions = np.around(prediction)
+    #print (predictions)
+
+    plt.scatter(features[:,0], features[:,1], c=predictions, cmap = plt.cm.Spectral)
+    plt.show()
+
 
 
 if __name__ == '__main__':
