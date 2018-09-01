@@ -36,8 +36,6 @@ def get_dataset():
     features = np.vstack([sick_people,sick_people2, healthy_people, healthy_people2])
     targets = np.concatenate((np.zeros(row_per_class*2), np.zeros(row_per_class*2)+1))
 
-    #features = np.vstack([[-2.9151944, -0.97887012],[ 1.64677955, 1.43885558],[-1.64697269,  0.68374247],[ 1.837042, -2.3003927 ]])
-    #targets = [0., 0., 1., 1.]
 
     plt.scatter(features[:,0], features[:,1], c=targets, cmap = plt.cm.Spectral)
     plt.show()
@@ -105,7 +103,7 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
         function of training multiple neural (ajust weights and bias in function of features and targets)
         This function is not generic or optimized and aims to understand better how it works
     """
-    epochs = 10000
+    epochs = 1000
     learning_rate = 0.3
 
     #display Accuracy before the training
@@ -114,14 +112,12 @@ def train_multiple_neurals(features, targets, weights_11, weights_12, weights_13
     print ("Accuracy", np.mean(predictions == targets))
 
     for epoch in range(epochs):
+        #every N epochs, we print the total cost in order to keep a follow up
         layer1, predictions = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
-        if epoch % 1000 == 0:
+        if epoch % 100 == 0:
             layer1, predictions = predict_output_neural(features, weights_11, weights_12, weights_13, weight_ouput, bias_11, bias_12, bias_13, bias_output)
             print (cost(predictions, targets))
-        """
-            There are a lot of things to do here !
-            to do the back propagation, we will first train the ouput neural
-        """
+
         #Init gradient
         weights_gradient_output = np.zeros(weight_ouput.shape)
         bias_gradient_output = 0

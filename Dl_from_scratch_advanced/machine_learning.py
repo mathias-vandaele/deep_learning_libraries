@@ -1,0 +1,73 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(z):
+    return 1.0/(1+ np.exp(-z))
+
+def sigmoid_derivative(y):
+    return y * (1.0 - y)
+
+class NeuralNetwork:
+    def __init__(self, x, y):
+        self.input      = x
+        self.weights1   = np.random.rand(self.input.shape[1],4)
+        self.weights2   = np.random.rand(4,1)
+        self.y          = y
+        self.output     = np.zeros(self.y.shape)
+        self.bias1      = np.random.rand(1,4)
+        self.bias2      = np.random.rand(1,1)
+        self.learning_rate = 0.1
+
+    def feedforward(self):
+        self.layer1 = sigmoid(np.dot(self.input, self.weights1) + self.bias1)
+        self.output = sigmoid(np.dot(self.layer1, self.weights2) + self.bias2)
+
+    def backprop(self):
+        # application of the chain rule to find derivative of the loss function with respect to weights2 and weights1
+        d_weights2 = np.dot(self.layer1.T, (2*(self.y - self.output) * sigmoid_derivative(self.output)))
+        d_weights1 = np.dot(self.input.T,  (np.dot(2*(self.y - self.output) * sigmoid_derivative(self.output), self.weights2.T) * sigmoid_derivative(self.layer1)))
+
+        d_bias1    = np.dot(2*(self.y - self.output) * sigmoid_derivative(self.output), self.weights2.T) * sigmoid_derivative(self.layer1)
+        d_bias1    = d_bias1.sum(axis=0)
+
+        d_bias2    = 2*(self.y - self.output) * sigmoid_derivative(self.output)
+        d_bias2    = d_bias2.sum(axis=0)
+
+        # update the weights with the derivative (slope) of the loss function
+        self.weights1 += d_weights1 * self.learning_rate
+        self.weights2 += d_weights2 * self.learning_rate
+        self.bias1    += d_bias1 * self.learning_rate
+        self.bias2    += d_bias2 * self.learning_rate
+
+
+if __name__ == "__main__":
+
+    #Number of rows per class
+    row_per_class = 80
+    #generate rows
+    sick_people =  (np.random.randn(row_per_class,2)) + np.array([-2,-2])
+    sick_people2 =  (np.random.randn(row_per_class,2)) + np.array([2,2])
+    healthy_people = (np.random.randn(row_per_class,2)) + np.array([-2,2])
+    healthy_people2 =  (np.random.randn(row_per_class,2)) + np.array([2,-2])
+
+    features = np.vstack([sick_people,sick_people2, healthy_people, healthy_people2])
+    targets = (np.concatenate((np.zeros(row_per_class*2), np.zeros(row_per_class*2)+1))[np.newaxis]).T
+    nn = NeuralNetwork(features,targets)
+
+
+
+    nn.feedforward()
+    predictions = np.around(nn.output)
+    print ("Accuracy", np.mean(predictions == nn.y))
+
+    for i in range(15000):
+        nn.feedforward()
+        nn.backprop()
+
+    nn.feedforward()
+    predictions = np.around(nn.output)
+    print ("Accuracy", np.mean(predictions == nn.y))
+
+    predictions = np.around(np.squeeze(np.asarray(nn.output)))
+    plt.scatter(features[:,0], features[:,1], c=predictions, cmap = plt.cm.Spectral)
+    plt.show()
