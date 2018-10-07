@@ -1,5 +1,5 @@
 """
-    Mathias Vandaele code
+    Author : Mathias Vandaele
     code splited to the maximum in order to understand better machine learning especially deep learning
 """
 import numpy as np
