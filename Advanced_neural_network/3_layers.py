@@ -1,5 +1,5 @@
 """
-    VANDAELE Mathias
+    author : VANDAELE Mathias
 """
 
 import numpy as np
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     targets = targets[np.newaxis].T
 
     """
-    
+
     #Number of rows per class
     row_per_class = 100
     #generate rows
