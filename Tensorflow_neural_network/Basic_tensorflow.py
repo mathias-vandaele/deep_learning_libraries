@@ -37,9 +37,9 @@ if __name__ == '__main__':
 
     ###FIRST LAYER###
     #Initilization of the weight for THREE neurons, 2 features so [2,3]
-    w1 = tf.Variable(tf.random_normal([2,300]))
+    w1 = tf.Variable(tf.random_normal([2,3]))
     #Initilization of the weight for THREE neurons,1 bias per neuron so [3]
-    b1 = tf.Variable(tf.zeros([300]))
+    b1 = tf.Variable(tf.zeros([3]))
     #Calculus of the pre activation
     z1 = tf.matmul(tf_features, w1) + b1
     #Calculus of the activation
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     #Calculus of the cost
 
     ###SECOND LAYER (OUTPUT)###
-    #Initilization of the weight for ONE neuron, 3 features from the hidden layer so [2,1]
-    w2 = tf.Variable(tf.random_normal([300,1]))
+    #Initilization of the weight for ONE neuron, 3 features from the hidden layer so [3,1]
+    w2 = tf.Variable(tf.random_normal([3,1]))
     #Initilization of the weight for ONE neuron,1 bias per neuron so [1]
     b2 = tf.Variable(tf.zeros([1]))
     #Calculus of the pre activation
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     sess = tf.Session()
     sess.run(tf.global_variables_initializer())
 
-    for epoch in range(50000):
+    for epoch in range(10000):
 
         sess.run(train, feed_dict = {
             tf_features : features,
