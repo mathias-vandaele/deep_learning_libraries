@@ -114,6 +114,7 @@ if __name__ == '__main__':
             batch = X_train[b:b+batch_size]
             y_train_batch = y_train[b:b+batch_size]
             sess.run(training_operation, feed_dict = {
+                dropout: 0.8,
                 x: batch,
                 y: y_train_batch
             })
